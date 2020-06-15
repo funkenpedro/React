@@ -1,0 +1,209 @@
+++++++++++++++++++++++++++++++++++
+Const vs Let vs Var
+++++++++++++++++++++++++++++
+
+Let vs Var vs Const
+
+function sayHello(){
+	for (var i = 0; i<5; i++)
+	{console.log(i)}
+	console.log(i)
+}
+
+var is scoped to the function,
+let is scoped to the block, if you replace var with let above you'll get an error
+
+const cannot be reassigned to.
+
+
++++++++++++++++++++++++++++++++++++
+Objects
+++++++++++++++++++++++++++++++++++++
+
+const person ={
+	name:'Moish',
+	walk: function(){},  //both of these can be used to declare a method
+	talk() {} 
+	
+}
+person.talk()
+person['name'] = 'John'
+
+
+
++++++++++++++++++++++++++++
+this Keyword
++++++++++++++++++++++++++
+const person ={
+	name:'Moish',
+	talk() {console.log(this)} 
+	
+}
+person.talk();
+
+in this instance, this returns a reference to the person object.
+if you set an object equal to the function talk()
+const talk = person.talk; //function not executed here,
+and execute talk(); it will return a reference to the window object and you might get undefined.
+
+you can bind the person object to the function so that "this" will reference the person object
+
+const talk = person.talk.bind(person)
+
++++++++++++++++++++++++++++++++++
+Arrow Functions
++++++++++++++++++++++++++++++++
+
+old javascript
+const square = function(number){
+	return number * number
+}
+
+const square = number =>{
+ number * number
+}
+
+useful here when using predicat functions:
+const jobs = [
+{id: 1, isActive: true}
+{id: 2, isActive: true}
+{id: 3, isActive: false}
+]
+const activeJobs = jobs.filter(function(job){return job.isActive})
+can be replaced with
+const activeJobs = jobs.filter(job => job.isActive)
+
+
+++++++++++++++++++++++
+Arrow functions and This
+++++++++++++++++++++
+in an Arrow function, "this" inherits the context in which it was defined.
+const person ={
+	talk() {setTimeout(()=> console.log(this), 1000)} 
+	
+}
+person.talk();
+will show the function
+
+
+++++++++++++++++++++++++++
+Array Map Method
+++++++++++++++++++++++++++
+
+const colors =['red', 'green', 'blue']
+colors.map(function(color){
+return '<li>'+color+'</li>';});
+
+or
+colors.map(color => '<li>'+color+'</li>';)
+
+or use template literals
+
+colors.map(color => `<li>${color}</li>`)
+
+++++++++++++++++++++++++++++++
+Object Destructuring
+++++++++++++++++++++++++++++
+const address = {
+	street: ''
+	city: ''
+	country: ''
+}
+destructuring can get the properties:
+const {street, city, country} = address
+can use an alias and can get only a single property
+const {street: st} = address
+
+
+++++++++++++++++++++++++++
+Spread Operator
++++++++++++++++++++++
+const first = [1,23,43]
+const second = [4,5,6]
+
+const combined = [...first, ...second] //the ... spreads the contents of the array
+
+works for objects also
+const first={}
+const second={}
+const combinde = {...first, ...second}
+
+can be used to clone an array or object
+const another=[...first]
+
+
+++++++++++++++++++++++++++
+Classes
++++++++++++++++++++
+if you have multiple objects with the same properties use a class to define them
+
+class Person {
+
+	constructor(name){
+		this.name = name;
+	}
+	walk(){
+		console.log("walk")
+	}
+}
+
+const person = new Person("Pedro")
+
+
++++++++++++++++++++++++++++++++++
+Inheritance
+++++++++++++++++++++++++++++++++
+Teacher can inherit from Person
+
+class Teacher extends Person {
+	teach(){
+	console.log("teach")
+		
+	}
+	
+}
+
+To add a constructor to teacher you need to refer to the base class with super
+
+class Teacher extends Person {
+	constructor(name, degree){
+		super(name);
+		this.degree = degree;
+	
+	}
+	teach(){
+	console.log("teach")
+		
+	}
+	
+}
+
+++++++++++++++++++++++++++++
+modules
+++++++++++++++++++++++++++++
+
+to split classes into different files, you split them into modules
+so if there is a person class and a teacher class put them each in a
+file.js of their own.
+the objects are private by default. to make it public you have to use export
+for example:
+
+import {Person} from './person';
+
+export class Teacher extends...
+
++++++++++++++++++++++++++
+named and default exports
++++++++++++++++++++++++++
+if you specifically export a class or function it is called a Named export
+if you add default to the export statement ie export default class Teacher
+you can import them with import Teacher from './teacher'
+
+import React, {component} from 'react'
+imports the default export (React) and the named export (Component) from 'react'
+which is in the node-modules folder.
+  
+TIP:Hit ctrl space to get hints or lists of methods and objects inside parenthesis
+
+
+
